@@ -33,9 +33,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
 
 @router.post("/refresh", response_model=Token)
 async def refresh_token(payload: TokenRefresh, db: AsyncSession = Depends(get_db)):
-    user = await get_user_by_email(db, payload.refresh_token)
-    if not user:
-        pass
     try:
         from jose import jwt
         from app.core.config import settings
@@ -47,6 +44,10 @@ async def refresh_token(payload: TokenRefresh, db: AsyncSession = Depends(get_db
         if not email:
             raise HTTPException(status_code=401, detail="Invalid refresh token")
     except Exception:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+
+    user = await get_user_by_email(db, email)
+    if not user:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
 
     access_token = create_access_token(subject=email, role=user.role)

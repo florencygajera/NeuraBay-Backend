@@ -43,3 +43,14 @@ async def health_check():
 
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+
+def get_app():
+    """Factory/helper for Uvicorn and tests."""
+    return app
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host="127.0.0.1", port=8001, reload=True)

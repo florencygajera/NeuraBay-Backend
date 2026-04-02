@@ -10,13 +10,13 @@ from app.utils.helpers import standard_response
 router = APIRouter()
 
 
-@router.get("/", response_model=dict)
+@router.get("", response_model=dict)
 async def list_services(limit: int = 20, offset: int = 0, db: AsyncSession = Depends(get_db)):
     services = await list_service_items(db, limit, offset)
     return standard_response([ServiceOut.model_validate(s) for s in services], meta={"limit": limit, "offset": offset})
 
 
-@router.post("/", response_model=dict)
+@router.post("", response_model=dict)
 async def create_service(
     obj_in: ServiceCreate,
     db: AsyncSession = Depends(get_db),

@@ -4,7 +4,9 @@ from passlib.context import CryptContext
 from jose import jwt
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use PBKDF2 as the default hashing scheme for compatibility/stability.
+# Keep bcrypt in the context so existing bcrypt hashes can still be verified.
+pwd_context = CryptContext(schemes=["pbkdf2_sha256", "bcrypt"], deprecated="auto")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

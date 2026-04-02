@@ -5,4 +5,5 @@ from app.services.blog_service import *
 from app.services.job_service import *
 from app.services.contact_service import *
 from app.services.testimonial_service import *
+from app.services.taxonomy_service import *
 from app.services.ai_service import *

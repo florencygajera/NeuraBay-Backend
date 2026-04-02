@@ -22,3 +22,7 @@ class Blog(Base, IDMixin, TimestampMixin, SoftDeleteMixin):
     author = relationship("User", back_populates="blogs")
     category = relationship("Category", back_populates="blogs")
     tags = relationship("Tag", secondary=blog_tags, back_populates="blogs")
+
+    @property
+    def tag_ids(self) -> list[int]:
+        return [tag.id for tag in self.tags] if self.tags else []

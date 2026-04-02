@@ -1,4 +1,5 @@
-﻿from sqlalchemy import select
+﻿from datetime import datetime, timezone
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.job import Job
 from app.schemas.job import JobCreate, JobUpdate
@@ -18,7 +19,8 @@ async def list_jobs(db: AsyncSession, limit: int, offset: int, active_only: bool
 
 
 async def create_job(db: AsyncSession, obj_in: JobCreate) -> Job:
-    db_obj = Job(**obj_in.model_dump())
+    data = obj_in.model_dump()
+    db_obj = Job(**data, posted_at=datetime.now(timezone.utc))
     db.add(db_obj)
     await db.commit()
     await db.refresh(db_obj)
